@@ -11,35 +11,41 @@ export class ChoresComponent {
   doChores() {
     console.log('Begin do chores...');
 
-    this.closeWindow();
-    this.turnOnAC();
-    this.turnOnHeater();
-    this.turnOnWashingMachine();
-
-    console.log('Finish all chores!!!');
+    // Callback hell
+    this.closeWindow(() => {
+      this.turnOnAC(() => {
+        this.turnOnHeater(() => {
+          this.turnOnWashingMachine(() => console.log('Finish all chores!!!'));
+        });
+      });
+    });
   }
 
-  closeWindow() {
+  closeWindow(callBack: CallableFunction) {
     setTimeout(() => {
       console.log('Window is closed!');
+      callBack();
     }, 3000);
   }
 
-  turnOnAC() {
+  turnOnAC(callBack: CallableFunction) {
     setTimeout(() => {
       console.log('AC is ON!');
+      callBack();
     }, 1000);
   }
 
-  turnOnHeater() {
+  turnOnHeater(callBack: CallableFunction) {
     setTimeout(() => {
       console.log('heater is turn on!');
+      callBack();
     }, 1500);
   }
 
-  turnOnWashingMachine() {
+  turnOnWashingMachine(callBack: CallableFunction) {
     setTimeout(() => {
       console.log('Washing Machine is on!');
+      callBack();
     }, 2500);
   }
 }
