@@ -10,7 +10,7 @@ import { filter, map } from 'rxjs/operators';
   styleUrl: './chores.component.scss',
 })
 export class ChoresComponent {
-  doChores() {
+  async doChores() {
     console.log('Begin do chores...');
 
     /*
@@ -24,6 +24,7 @@ export class ChoresComponent {
     });
     */
 
+    /*
     this.closeWindow()
       .then((msg) => {
         console.log(msg);
@@ -41,6 +42,21 @@ export class ChoresComponent {
         console.log(msg);
         console.log('Finish all chores!!!');
       });
+      */
+
+    const closeWinMsg = await this.closeWindow();
+    console.log(closeWinMsg);
+
+    const turnOnACMsg = await this.turnOnAC();
+    console.log(turnOnACMsg);
+
+    const turnOnHeaterMsg = await this.turnOnHeater();
+    console.log(turnOnHeaterMsg);
+
+    const turnOnWashingMachineMsg = await this.turnOnWashingMachine();
+    console.log(turnOnWashingMachineMsg);
+
+    console.log('Finish all chores!!!');
   }
 
   doChores2() {
