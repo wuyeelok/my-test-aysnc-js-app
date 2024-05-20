@@ -102,7 +102,12 @@ export class ChoresComponent {
     const heater$ = defer(() => this.turnOnHeater());
     const washingMachine$ = defer(() => this.turnOnWashingMachine());
 
-    window$.subscribe((data) => {
+    concat(window$, ac$, heater$, washingMachine$).subscribe({
+      next: (x) => console.log(x),
+      complete: () => console.log('Finish all chores 3!!!!'),
+    });
+
+    /* window$.subscribe((data) => {
       console.log(data);
       ac$.subscribe((data) => {
         console.log(data);
@@ -114,7 +119,7 @@ export class ChoresComponent {
           });
         });
       });
-    });
+    }); */
   }
 
   closeWindow(): Promise<String> {
