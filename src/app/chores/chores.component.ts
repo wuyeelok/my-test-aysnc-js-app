@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chores',
@@ -40,6 +42,16 @@ export class ChoresComponent {
         console.log('Finish all chores!!!');
       });
   }
+
+  doChores2() {
+    const numbers$ = of(1, 2, 3, 4, 5, 6); // simple observable that emits three values
+
+    const subscription = numbers$
+      .pipe(map((val) => val * 2))
+      .subscribe((val) => console.log(val));
+  }
+
+  private seqSub() {}
 
   closeWindow(): Promise<String> {
     return new Promise((callInThen, callInCatch) => {
