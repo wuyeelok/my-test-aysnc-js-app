@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
 
 @Component({
   selector: 'app-chores',
@@ -60,14 +59,36 @@ export class ChoresComponent {
   }
 
   doChores2() {
-    const numbers$ = of(1, 2, 3, 4, 5, 6); // simple observable that emits three values
+    console.log('Begin do chores2...');
 
-    const subscription = numbers$
-      .pipe(map((val) => val * 2))
-      .subscribe((val) => console.log(val));
+    const closeWindow$ = from(this.closeWindow());
+    // closeWindow$.subscribe((val) => console.log(val));
+
+    const turnOnAC$ = from(this.turnOnHeater());
+    // turnOnAC$.subscribe((val) => console.log(val));
+
+    /* concat(closeWindow$, turnOnAC$).subscribe((val) => {
+      console.log(val);
+    }); */
+
+    const observable = new Observable((ob) => {
+      setTimeout(() => {
+        ob.next('XXXXX');
+        setTimeout(() => {
+          ob.next('YYYYYY');
+          setTimeout(() => {
+            ob.next('ZZZZZ');
+            ob.complete();
+          }, 2500);
+        }, 2000);
+      }, 3000);
+    });
+
+    observable.subscribe({
+      next: (value) => console.log(value),
+      complete: () => console.log('finish everything!!'),
+    });
   }
-
-  private seqSub() {}
 
   closeWindow(): Promise<String> {
     return new Promise((callInThen, callInCatch) => {
