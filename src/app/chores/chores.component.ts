@@ -1,5 +1,18 @@
 import { Component } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import {
+  Observable,
+  forkJoin,
+  from,
+  mergeMap,
+  filter,
+  pipe,
+  of,
+  concatMap,
+  flatMap,
+  concat,
+  defer,
+} from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chores',
@@ -61,32 +74,46 @@ export class ChoresComponent {
   doChores2() {
     console.log('Begin do chores2...');
 
-    const closeWindow$ = from(this.closeWindow());
-    // closeWindow$.subscribe((val) => console.log(val));
+    const bb = from(this.closeWindow());
 
-    const turnOnAC$ = from(this.turnOnHeater());
-    // turnOnAC$.subscribe((val) => console.log(val));
+    bb.pipe(
+      concatMap((data) => {
+        console.log(data);
+        return cc;
+      }),
+      concatMap((data) => {
+        console.log(data);
+        return dd;
+      })
+    ).subscribe((data) => console.log(data));
 
-    /* concat(closeWindow$, turnOnAC$).subscribe((val) => {
-      console.log(val);
-    }); */
+    const cc = from(this.turnOnAC());
 
-    const observable = new Observable((ob) => {
-      setTimeout(() => {
-        ob.next('XXXXX');
-        setTimeout(() => {
-          ob.next('YYYYYY');
-          setTimeout(() => {
-            ob.next('ZZZZZ');
-            ob.complete();
-          }, 2500);
-        }, 2000);
-      }, 3000);
-    });
+    const dd = from(this.turnOnHeater());
 
-    observable.subscribe({
-      next: (value) => console.log(value),
-      complete: () => console.log('finish everything!!'),
+    //concat(bb, cc, dd).subscribe((msg) => console.log(msg));
+  }
+
+  doChores3() {
+    console.log('Begin do chores3...');
+
+    const window$ = defer(() => this.closeWindow());
+    const ac$ = defer(() => this.turnOnAC());
+    const heater$ = defer(() => this.turnOnHeater());
+    const washingMachine$ = defer(() => this.turnOnWashingMachine());
+
+    window$.subscribe((data) => {
+      console.log(data);
+      ac$.subscribe((data) => {
+        console.log(data);
+        heater$.subscribe((data) => {
+          console.log(data);
+          washingMachine$.subscribe((data) => {
+            console.log(data);
+            console.log('Finish all chore 3!!!');
+          });
+        });
+      });
     });
   }
 
@@ -94,7 +121,7 @@ export class ChoresComponent {
     return new Promise((callInThen, callInCatch) => {
       setTimeout(() => {
         callInThen('Window is closed!');
-      }, 3000);
+      }, 5000);
     });
   }
 
@@ -102,7 +129,7 @@ export class ChoresComponent {
     return new Promise((callInThen, callInCatch) => {
       setTimeout(() => {
         callInThen('AC is ON!');
-      }, 1000);
+      }, 2000);
     });
   }
 
