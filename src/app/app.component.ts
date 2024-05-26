@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { ChoresComponent } from './chores/chores.component';
+import { ChoreService } from './chore.service';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,15 @@ import { ChoresComponent } from './chores/chores.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  ngOnInit(): void {
+    this.choreService.myPubisher.subscribe({
+      next: (msg: string) => {
+        this.title = msg;
+      },
+    });
+  }
   title = 'Testing Asynchronous JavaScript';
+
+  constructor(private choreService: ChoreService) {}
 }

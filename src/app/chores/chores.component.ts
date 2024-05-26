@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import {
   Observable,
   forkJoin,
@@ -13,15 +13,20 @@ import {
   defer,
 } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ChoreService } from '../chore.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chores',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './chores.component.html',
   styleUrl: './chores.component.scss',
 })
 export class ChoresComponent {
+  choreService: ChoreService = inject(ChoreService);
+  updateTitle?: string;
+
   async doChores() {
     console.log('Begin do chores...');
 
@@ -152,5 +157,11 @@ export class ChoresComponent {
         callInThen('Washing Machine is on!');
       }, 2500);
     });
+  }
+
+  testPublisher() {
+    if (this.updateTitle) {
+      this.choreService.myPubisher.next(this.updateTitle);
+    }
   }
 }
