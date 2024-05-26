@@ -5,7 +5,12 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class ChoreService {
-  myPubisher = new Subject<string>();
+  private myPubisher = new Subject<string>();
+  exposePublisher$ = this.myPubisher.asObservable();
 
   constructor() {}
+
+  notifyUpdateTitle(msg: string) {
+    this.myPubisher.next(msg);
+  }
 }

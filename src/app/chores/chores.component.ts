@@ -161,7 +161,7 @@ export class ChoresComponent {
 
   testPublisher() {
     if (this.updateTitle) {
-      this.choreService.myPubisher.next(this.updateTitle);
+      this.choreService.notifyUpdateTitle(this.updateTitle);
     }
   }
 }

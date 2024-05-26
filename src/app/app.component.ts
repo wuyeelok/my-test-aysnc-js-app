@@ -12,7 +12,7 @@ import { ChoreService } from './chore.service';
 })
 export class AppComponent implements OnInit {
   ngOnInit(): void {
-    this.choreService.myPubisher.subscribe({
+    this.choreService.exposePublisher$.subscribe({
       next: (msg: string) => {
         this.title = msg;
       },
